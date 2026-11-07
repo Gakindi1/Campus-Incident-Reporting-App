@@ -1,0 +1,110 @@
+rules_version = '2';
+
+// CampusFix Firestore security rules.
+// The app hides staff-only actions in the UI, but these rules are the real
+// access control: a modified client still cannot change statuses or roles.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // Verified ALU account (student or staff domain).
+    function verifiedAlu() {
+      return signedIn()
+        && request.auth.token.email_verified == true
+        && request.auth.token.email.lower()
+             .matches('.*@(alustudent|alueducation)[.]com$');
+    }
+
+    function isStaff() {
+      return verifiedAlu()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid))
+             .data.role == 'staff';
+    }
+
+    function changed() {
+      return request.resource.data.diff(resource.data).affectedKeys();
+    }
+
+    // ---------------------------------------------------------------- users
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isStaff());
+
+      // Profiles are created at registration (before verification) and are
+      // ALWAYS students. Staff are promoted in the Firebase Console.
+      allow create: if signedIn()
+        && request.auth.uid == uid
+        && request.resource.data.role == 'student'
+        && request.resource.data.keys().hasOnly(
+             ['fullName', 'email', 'role', 'createdAt']);
+
+      // Users may edit their own name but never their role.
+      allow update: if signedIn()
+        && request.auth.uid == uid
+        && changed().hasOnly(['fullName']);
+
+      allow delete: if false;
+    }
+
+    // ------------------------------------------------------------ incidents
+    match /incidents/{incidentId} {
+      allow read: if verifiedAlu();
+
+      allow create: if verifiedAlu()
+        && request.resource.data.reporterId == request.auth.uid
+        && request.resource.data.status == 'submitted'
+        && request.resource.data.title is string
+        && request.resource.data.title.size() >= 5
+        && request.resource.data.title.size() <= 80
+        && request.resource.data.description is string
+        && request.resource.data.description.size() >= 15
+        && request.resource.data.description.size() <= 1000
+        && request.resource.data.category in
+             ['facilities', 'water', 'electricity', 'safety', 'sanitation',
+              'internet', 'furniture', 'other']
+        && request.resource.data.priority in ['low', 'medium', 'high']
+        && request.resource.data.supporters.size() == 0
+        && request.resource.data.statusHistory.size() == 1;
+
+      allow update: if
+        // Staff move the status forward and append to the timeline only.
+        (isStaff()
+          && changed().hasOnly(['status', 'statusHistory', 'updatedAt'])
+          && request.resource.data.status in
+               ['submitted', 'underReview', 'inProgress', 'resolved', 'rejected']
+          && request.resource.data.statusHistory.size()
+               == resource.data.statusHistory.size() + 1)
+        // Reporters edit details only while nobody has acted on the report.
+        || (verifiedAlu()
+          && resource.data.reporterId == request.auth.uid
+          && resource.data.status == 'submitted'
+          && changed().hasOnly(['title', 'description', 'category',
+               'priority', 'location', 'locationDetail', 'isAnonymous',
+               'reporterName', 'imageUrl', 'imagePath', 'updatedAt'])
+          && request.resource.data.title.size() >= 5
+          && request.resource.data.title.size() <= 80
+          && request.resource.data.description.size() <= 1000)
+        // Any verified user may add or remove ONLY their own "Me too".
+        || (verifiedAlu()
+          && changed().hasOnly(['supporters'])
+          && onlyOwnSupportToggled());
+
+      // Reporters may withdraw before review; staff may remove abuse/spam.
+      allow delete: if isStaff()
+        || (verifiedAlu()
+          && resource.data.reporterId == request.auth.uid
+          && resource.data.status == 'submitted');
+
+      function onlyOwnSupportToggled() {
+        let before = resource.data.supporters.toSet();
+        let after = request.resource.data.supporters.toSet();
+        let me = [request.auth.uid].toSet();
+        return (after.difference(before) == me && before.difference(after).size() == 0)
+          || (before.difference(after) == me && after.difference(before).size() == 0);
+      }
+    }
+  }
+}

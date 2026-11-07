@@ -1,0 +1,34 @@
+rules_version = '2';
+
+// CampusFix Storage rules. Photos live at incidents/{uid}/{incidentId}/{file}
+// so the owner can be checked from the path alone.
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function verifiedAlu() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email.lower()
+             .matches('.*@(alustudent|alueducation)[.]com$');
+    }
+
+    // Cross-service lookup of the role stored in Firestore.
+    function isStaff() {
+      return verifiedAlu()
+        && firestore.get(/databases/(default)/documents/users/$(request.auth.uid))
+             .data.role == 'staff';
+    }
+
+    match /incidents/{uid}/{incidentId}/{fileName} {
+      allow read: if verifiedAlu();
+
+      // Only images under 5 MB, only into your own folder.
+      allow create: if verifiedAlu()
+        && request.auth.uid == uid
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+
+      allow delete: if verifiedAlu() && (request.auth.uid == uid || isStaff());
+    }
+  }
+}

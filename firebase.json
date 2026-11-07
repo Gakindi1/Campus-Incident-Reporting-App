@@ -1,0 +1,28 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "campusfix-nchris",
+          "appId": "1:1088831748615:android:d5c9589fe18f3123db48a2",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "campusfix-nchris",
+          "configurations": {
+            "android": "1:1088831748615:android:d5c9589fe18f3123db48a2",
+            "ios": "1:1088831748615:ios:67e3c5d435ed99afdb48a2"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  }
+}

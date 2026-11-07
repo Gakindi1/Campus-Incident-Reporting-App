@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1088831748615",
+    "project_id": "campusfix-nchris",
+    "storage_bucket": "campusfix-nchris.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1088831748615:android:d5c9589fe18f3123db48a2",
+        "android_client_info": {
+          "package_name": "com.alu.campusfix.campus_fix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjfAUJrztNmVBq1tGEFQ1MEFTRknoOGNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
