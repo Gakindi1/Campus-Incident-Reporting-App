@@ -14,8 +14,6 @@ import '../../widgets/status_timeline.dart';
 import '../report_form/report_incident_screen.dart';
 import 'update_status_sheet.dart';
 
-/// Full view of one report. Looks the incident up by ID in the shared
-/// [IncidentProvider], so it refreshes live when staff change its status.
 class IncidentDetailsScreen extends StatelessWidget {
   const IncidentDetailsScreen({super.key, required this.incidentId});
 
@@ -115,9 +113,8 @@ class IncidentDetailsScreen extends StatelessWidget {
           _Card(
             child: Text(
               incident.description,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(height: 1.5),
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(height: 1.5),
             ),
           ),
           if (incident.imageUrl != null) ...[
@@ -301,9 +298,8 @@ class _MetaRow extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: AppColors.textSecondary,
-            ),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: AppColors.textSecondary),
           ),
         ),
       ],
@@ -311,7 +307,6 @@ class _MetaRow extends StatelessWidget {
   }
 }
 
-/// "Me too" confirmation that others are affected by the same issue.
 class _SupportBar extends StatelessWidget {
   const _SupportBar({
     required this.incident,
@@ -388,12 +383,13 @@ class _InfoBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(Icons.info_outline_rounded,
-              color: AppColors.primary, size: 20),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(text, style: const TextStyle(fontSize: 12.5)),
+          const Icon(
+            Icons.info_outline_rounded,
+            color: AppColors.primary,
+            size: 20,
           ),
+          const SizedBox(width: 10),
+          Expanded(child: Text(text, style: const TextStyle(fontSize: 12.5))),
         ],
       ),
     );
@@ -409,9 +405,8 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: Theme.of(
-        context,
-      ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+      style: Theme.of(context).textTheme.titleMedium
+          ?.copyWith(fontWeight: FontWeight.w800),
     );
   }
 }

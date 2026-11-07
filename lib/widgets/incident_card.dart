@@ -6,8 +6,6 @@ import '../models/incident.dart';
 import 'incident_image.dart';
 import 'status_chip.dart';
 
-/// Summary row for an incident, used on the home dashboard, the reports list
-/// and the staff queue.
 class IncidentCard extends StatelessWidget {
   const IncidentCard({
     super.key,

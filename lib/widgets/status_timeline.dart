@@ -5,8 +5,6 @@ import '../core/theme/status_style.dart';
 import '../core/utils/date_format.dart';
 import '../models/status_change.dart';
 
-/// Vertical timeline of every status change on an incident, including the
-/// staff member's note, so reporters understand what happened and why.
 class StatusTimeline extends StatelessWidget {
   const StatusTimeline({super.key, required this.history});
 
@@ -19,10 +17,7 @@ class StatusTimeline extends StatelessWidget {
     return Column(
       children: [
         for (var i = 0; i < entries.length; i++)
-          _TimelineEntry(
-            change: entries[i],
-            isLast: i == entries.length - 1,
-          ),
+          _TimelineEntry(change: entries[i], isLast: i == entries.length - 1),
       ],
     );
   }

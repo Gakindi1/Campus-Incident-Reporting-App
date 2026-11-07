@@ -3,15 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/incident.dart';
 import '../models/status_change.dart';
 
-/// Data-access contract for incidents.
-///
-/// Providers depend on this abstraction rather than on Firestore directly, so
-/// business logic can be unit tested with an in-memory fake.
 abstract class IncidentRepository {
   Stream<List<Incident>> watchIncidents();
 
-  /// Reserves a document ID so a photo can be uploaded under it before the
-  /// report itself is written.
   String newIncidentId();
 
   Future<void> createIncident(Incident incident);
@@ -20,7 +14,11 @@ abstract class IncidentRepository {
 
   Future<void> addStatusChange(String incidentId, StatusChange change);
 
-  Future<void> setSupport(String incidentId, String uid, {required bool support});
+  Future<void> setSupport(
+    String incidentId,
+    String uid, {
+    required bool support,
+  });
 
   Future<void> deleteIncident(String incidentId);
 }
@@ -31,8 +29,6 @@ class FirestoreIncidentRepository implements IncidentRepository {
 
   final FirebaseFirestore _firestore;
 
-  /// Maximum reports streamed to the device. Older reports remain in
-  /// Firestore; see the technical report for the pagination roadmap.
   static const int streamLimit = 300;
 
   CollectionReference<Map<String, dynamic>> get _incidents =>

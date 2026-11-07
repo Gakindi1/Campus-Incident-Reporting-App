@@ -8,7 +8,6 @@ import 'package:campus_fix/models/status_change.dart';
 import 'package:campus_fix/services/incident_repository.dart';
 import 'package:campus_fix/services/storage_service.dart';
 
-/// In-memory repository that behaves like Firestore's live stream.
 class FakeIncidentRepository implements IncidentRepository {
   final _controller = StreamController<List<Incident>>.broadcast();
   final Map<String, Incident> _store = {};

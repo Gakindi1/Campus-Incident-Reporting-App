@@ -12,11 +12,6 @@ enum UserRole {
       name == staff.name ? staff : student;
 }
 
-/// Profile document stored at `users/{uid}`.
-///
-/// The [role] is never chosen by the user: new accounts are always created as
-/// students and Firestore security rules forbid changing it from the client.
-/// Staff are promoted by an administrator in the Firebase Console.
 class AppUser {
   const AppUser({
     required this.uid,

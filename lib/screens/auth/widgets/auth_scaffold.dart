@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
 
-/// Shared layout for the sign-in, registration and verification screens:
-/// a branded gradient header with a white card sheet below it.
 class AuthScaffold extends StatelessWidget {
   const AuthScaffold({
     super.key,
@@ -95,7 +93,6 @@ class AuthScaffold extends StatelessWidget {
   }
 }
 
-/// App logo: a shield with a wrench, signalling "safe campus, fixed fast".
 class BrandMark extends StatelessWidget {
   const BrandMark({super.key, this.light = true});
 
@@ -113,7 +110,11 @@ class BrandMark extends StatelessWidget {
             color: AppColors.accent,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Icon(Icons.shield_rounded, color: Colors.white, size: 22),
+          child: const Icon(
+            Icons.shield_rounded,
+            color: Colors.white,
+            size: 22,
+          ),
         ),
         const SizedBox(width: 10),
         Text(

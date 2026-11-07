@@ -24,9 +24,7 @@ void main() {
     expect(find.text('In Progress'), findsOneWidget);
   });
 
-  testWidgets('CategorySelector reports taps and shows errors', (
-    tester,
-  ) async {
+  testWidgets('CategorySelector reports taps and shows errors', (tester) async {
     IncidentCategory? selected;
     await tester.pumpWidget(
       _wrap(

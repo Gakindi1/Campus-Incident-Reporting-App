@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
 
-/// Compact metric tile used in the dashboard "Report Summary" row.
 class SummaryStatCard extends StatelessWidget {
   const SummaryStatCard({
     super.key,

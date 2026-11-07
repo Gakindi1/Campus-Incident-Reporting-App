@@ -42,8 +42,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         password: _passwordController.text,
       );
       if (!mounted) return;
-      // The AuthGate now shows the verification screen underneath; pop the
-      // registration route to reveal it.
       Navigator.of(context).popUntil((route) => route.isFirst);
     } catch (e) {
       if (mounted) showError(context, e);
@@ -141,8 +139,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               child: const Row(
                 children: [
-                  Icon(Icons.verified_user_outlined,
-                      color: AppColors.primary, size: 20),
+                  Icon(
+                    Icons.verified_user_outlined,
+                    color: AppColors.primary,
+                    size: 20,
+                  ),
                   SizedBox(width: 10),
                   Expanded(
                     child: Text(

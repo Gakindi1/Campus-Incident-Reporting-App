@@ -2,17 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
 
-/// Consistent user feedback helpers so every screen reports success and
-/// failure the same way.
 void showSuccess(BuildContext context, String message) =>
     _show(context, message, Icons.check_circle_rounded, AppColors.resolved);
 
-void showError(BuildContext context, Object error) => _show(
-  context,
-  _readable(error),
-  Icons.error_rounded,
-  AppColors.rejected,
-);
+void showError(BuildContext context, Object error) =>
+    _show(context, _readable(error), Icons.error_rounded, AppColors.rejected);
 
 void _show(BuildContext context, String message, IconData icon, Color color) {
   ScaffoldMessenger.of(context)
@@ -33,7 +27,6 @@ void _show(BuildContext context, String message, IconData icon, Color color) {
 String _readable(Object error) {
   if (error is StateError) return error.message;
   final text = error.toString();
-  // Firebase errors look like "[cloud_firestore/permission-denied] message".
   if (text.contains('permission-denied')) {
     return 'You do not have permission to do that.';
   }
@@ -43,7 +36,6 @@ String _readable(Object error) {
   return text.replaceFirst(RegExp(r'^\[[^\]]+\]\s*'), '');
 }
 
-/// Asks the user to confirm a destructive action.
 Future<bool> confirmAction(
   BuildContext context, {
   required String title,

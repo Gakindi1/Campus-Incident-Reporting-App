@@ -10,8 +10,6 @@ import '../profile/profile_screen.dart';
 import '../report_form/report_incident_screen.dart';
 import '../reports/reports_screen.dart';
 
-/// Bottom-navigation shell. Tabs are kept alive in an [IndexedStack] so
-/// scroll position and filters survive tab switches.
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
 
@@ -24,7 +22,6 @@ class _MainShellState extends State<MainShell> {
 
   void _selectTab(int index) => setState(() => _index = index);
 
-  /// Opens the Reports tab, optionally pre-filtered (used by dashboard tiles).
   void _openReports({IncidentStatus? status, ReportScope? scope}) {
     final incidents = context.read<IncidentProvider>()..clearFilters();
     if (scope != null) incidents.setScope(scope);

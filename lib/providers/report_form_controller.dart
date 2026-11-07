@@ -6,11 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import '../models/incident.dart';
 import '../models/incident_enums.dart';
 
-/// Screen-scoped state for creating or editing a report.
-///
-/// Text fields stay in [TextEditingController]s owned by the screen; this
-/// class holds the selections and the photo, which several widgets on the
-/// form need to read and change.
 class ReportFormController extends ChangeNotifier {
   ReportFormController({this.initial, ImagePicker? picker})
     : _picker = picker ?? ImagePicker(),
@@ -20,7 +15,6 @@ class ReportFormController extends ChangeNotifier {
       _isAnonymous = initial?.isAnonymous ?? false,
       _existingImageUrl = initial?.imageUrl;
 
-  /// The report being edited, or null when creating a new one.
   final Incident? initial;
   final ImagePicker _picker;
 
@@ -67,7 +61,6 @@ class ReportFormController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Picks and downsizes a photo so uploads stay fast on campus Wi-Fi.
   Future<void> pickPhoto(ImageSource source) async {
     final picked = await _picker.pickImage(
       source: source,
@@ -90,7 +83,6 @@ class ReportFormController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Validates selections that live outside the [Form]. Returns true if valid.
   bool validateSelections() {
     _showCategoryError = _category == null;
     notifyListeners();

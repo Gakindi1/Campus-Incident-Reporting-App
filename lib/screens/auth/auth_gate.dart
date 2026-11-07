@@ -8,8 +8,6 @@ import 'login_screen.dart';
 import 'verify_email_screen.dart';
 import 'widgets/auth_scaffold.dart';
 
-/// Root widget that routes based on authentication state, so session
-/// handling lives in one place rather than in every screen.
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
 

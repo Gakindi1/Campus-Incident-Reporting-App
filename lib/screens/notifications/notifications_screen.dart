@@ -8,8 +8,6 @@ import '../../providers/incident_provider.dart';
 import '../../widgets/common.dart';
 import '../details/incident_details_screen.dart';
 
-/// Feed of staff actions on the user's reports, derived from each report's
-/// status history, so no separate notifications collection is needed.
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
 

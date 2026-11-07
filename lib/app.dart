@@ -9,8 +9,6 @@ import 'services/auth_service.dart';
 import 'services/incident_repository.dart';
 import 'services/storage_service.dart';
 
-/// Composition root: wires services into providers once, at the top of the
-/// widget tree, so every screen reads the same state.
 class CampusFixApp extends StatelessWidget {
   const CampusFixApp({super.key});
 
@@ -26,8 +24,6 @@ class CampusFixApp extends StatelessWidget {
         ChangeNotifierProvider<AuthProvider>(
           create: (context) => AuthProvider(context.read<AuthService>()),
         ),
-        // Rebinds the incident stream whenever the signed-in user changes,
-        // so one account never sees another's cached state.
         ChangeNotifierProxyProvider<AuthProvider, IncidentProvider>(
           create: (context) => IncidentProvider(
             repository: context.read<IncidentRepository>(),

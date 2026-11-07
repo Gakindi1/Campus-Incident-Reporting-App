@@ -12,10 +12,11 @@ import '../../widgets/incident_card.dart';
 import '../../widgets/summary_stat_card.dart';
 import '../details/incident_details_screen.dart';
 
-typedef OpenReports = void Function({IncidentStatus? status, ReportScope? scope});
+typedef OpenReports = void Function({
+  IncidentStatus? status,
+  ReportScope? scope,
+});
 
-/// Dashboard tab. Students see their own reports; staff see a campus-wide
-/// triage view with the most urgent open reports first.
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
     super.key,
@@ -41,7 +42,6 @@ class HomeScreen extends StatelessWidget {
     return SafeArea(
       bottom: false,
       child: RefreshIndicator(
-        // Data is live; the gesture is offered because users expect it.
         onRefresh: () => Future.delayed(const Duration(milliseconds: 600)),
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
@@ -49,7 +49,8 @@ class HomeScreen extends StatelessWidget {
             _Greeting(
               user: user,
               hasNewUpdates: incidents.updatesForMe.any(
-                (u) => DateTime.now().difference(u.change.changedAt).inHours < 48,
+                (u) =>
+                    DateTime.now().difference(u.change.changedAt).inHours < 48,
               ),
               onOpenNotifications: onOpenNotifications,
             ),
@@ -146,9 +147,7 @@ class HomeScreen extends StatelessWidget {
                     ? Icons.celebration_rounded
                     : Icons.campaign_outlined,
                 title: user.isStaff ? 'All caught up!' : 'No reports yet',
-                message: user.isStaff
-                    ? 'There are no open reports right now.'
-                    : 'When you report an issue, you can follow its progress here.',
+                message: user.isStaff ? 'There are no open reports right now.' : 'When you report an issue, you can follow its progress here.',
               )
             else
               ...list.map(

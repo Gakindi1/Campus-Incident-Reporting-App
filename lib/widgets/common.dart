@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
 
-/// Section title with an optional trailing action such as "See all".
 class SectionHeader extends StatelessWidget {
   const SectionHeader({
     super.key,
@@ -22,9 +21,8 @@ class SectionHeader extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+            style: Theme.of(context).textTheme.titleMedium
+                ?.copyWith(fontWeight: FontWeight.w800),
           ),
         ),
         if (actionLabel != null)
@@ -34,7 +32,6 @@ class SectionHeader extends StatelessWidget {
   }
 }
 
-/// A form label placed above its field, matching the reporting design.
 class LabeledField extends StatelessWidget {
   const LabeledField({
     super.key,
@@ -66,9 +63,8 @@ class LabeledField extends StatelessWidget {
                 ),
             ],
           ),
-          style: Theme.of(
-            context,
-          ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+          style: Theme.of(context).textTheme.labelLarge
+              ?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 8),
         child,
@@ -77,7 +73,6 @@ class LabeledField extends StatelessWidget {
   }
 }
 
-/// Filled button that swaps its label for a spinner while [isLoading].
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
     super.key,
@@ -129,7 +124,6 @@ class PrimaryButton extends StatelessWidget {
   }
 }
 
-/// Friendly placeholder for empty lists and error states.
 class EmptyState extends StatelessWidget {
   const EmptyState({
     super.key,
@@ -183,7 +177,6 @@ class EmptyState extends StatelessWidget {
   }
 }
 
-/// Circular avatar showing a user's initials.
 class InitialsAvatar extends StatelessWidget {
   const InitialsAvatar({
     super.key,
@@ -225,7 +218,6 @@ class InitialsAvatar extends StatelessWidget {
   }
 }
 
-/// Small pill label, e.g. the user's role.
 class RoleBadge extends StatelessWidget {
   const RoleBadge({super.key, required this.label, this.isStaff = false});
 

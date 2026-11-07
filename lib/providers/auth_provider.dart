@@ -6,22 +6,8 @@ import 'package:flutter/foundation.dart';
 import '../models/app_user.dart';
 import '../services/auth_service.dart';
 
-enum AuthStatus {
-  /// Waiting for Firebase to restore a previous session.
-  unknown,
-  unauthenticated,
+enum AuthStatus { unknown, unauthenticated, unverified, authenticated }
 
-  /// Signed in, but the ALU email address has not been verified yet.
-  unverified,
-
-  /// Signed in and verified; [AuthProvider.profile] may still be loading.
-  authenticated,
-}
-
-/// Application-wide authentication state.
-///
-/// Listens to Firebase's auth stream and to the signed-in user's Firestore
-/// profile, so role changes made by an administrator take effect live.
 class AuthProvider extends ChangeNotifier {
   AuthProvider(this._service) {
     _authSub = _service.authStateChanges().listen(_onAuthChanged);
@@ -56,18 +42,17 @@ class AuthProvider extends ChangeNotifier {
       _status = AuthStatus.authenticated;
       if (_profileSub == null || previousUid != user.uid) {
         _cancelProfile();
-        _profileSub = _service.watchProfile(user.uid).listen(
-          (profile) {
-            _profile = profile;
-            if (profile == null) {
-              _service.ensureProfile(user).catchError(
-                (Object e) => debugPrint('Could not create profile: $e'),
-              );
-            }
-            notifyListeners();
-          },
-          onError: (Object e) => debugPrint('Profile stream error: $e'),
-        );
+        _profileSub = _service.watchProfile(user.uid).listen((profile) {
+          _profile = profile;
+          if (profile == null) {
+            _service
+                .ensureProfile(user)
+                .catchError(
+                  (Object e) => debugPrint('Could not create profile: $e'),
+                );
+          }
+          notifyListeners();
+        }, onError: (Object e) => debugPrint('Profile stream error: $e'));
       }
     }
     notifyListeners();
@@ -79,7 +64,6 @@ class AuthProvider extends ChangeNotifier {
     _profile = null;
   }
 
-  /// Runs [action] while exposing a busy flag for loading indicators.
   Future<T> _guard<T>(Future<T> Function() action) async {
     _isBusy = true;
     notifyListeners();
@@ -96,11 +80,8 @@ class AuthProvider extends ChangeNotifier {
     required String email,
     required String password,
   }) => _guard(
-    () => _service.register(
-      fullName: fullName,
-      email: email,
-      password: password,
-    ),
+    () =>
+        _service.register(fullName: fullName, email: email, password: password),
   );
 
   Future<void> signIn(String email, String password) =>
@@ -112,8 +93,6 @@ class AuthProvider extends ChangeNotifier {
   Future<void> resendVerification() =>
       _guard(() => _service.resendVerification());
 
-  /// Returns true once the user has clicked the link in their inbox.
-  /// Background polling passes [silent] so no loading indicator flickers.
   Future<bool> checkVerified({bool silent = false}) => silent
       ? _service.reloadAndCheckVerified()
       : _guard(() => _service.reloadAndCheckVerified());

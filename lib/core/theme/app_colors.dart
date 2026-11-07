@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// Central colour palette for CampusFix.
-///
-/// A deep "midnight navy" conveys trust and authority (the app speaks on
-/// behalf of campus administration), a royal blue primary drives actions,
-/// and a warm amber accent is reserved for the single most important call to
-/// action: reporting an issue. Status colours follow familiar traffic-light
-/// semantics so users can read progress at a glance.
 class AppColors {
   AppColors._();
 
-  // Brand
   static const Color midnight = Color(0xFF0B1B3F);
   static const Color navy = Color(0xFF13285C);
   static const Color primary = Color(0xFF2F5BEA);
@@ -18,7 +10,6 @@ class AppColors {
   static const Color accent = Color(0xFFFF8A3D);
   static const Color accentLight = Color(0xFFFFF1E7);
 
-  // Neutrals
   static const Color background = Color(0xFFF5F7FB);
   static const Color surface = Colors.white;
   static const Color border = Color(0xFFE4E8F1);
@@ -26,7 +17,6 @@ class AppColors {
   static const Color textSecondary = Color(0xFF64748B);
   static const Color textMuted = Color(0xFF94A3B8);
 
-  // Semantic / status
   static const Color submitted = Color(0xFFF59E0B);
   static const Color submittedBg = Color(0xFFFFF7E6);
   static const Color review = Color(0xFF8B5CF6);

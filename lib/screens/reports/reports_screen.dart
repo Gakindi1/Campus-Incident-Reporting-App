@@ -9,9 +9,6 @@ import '../../widgets/common.dart';
 import '../../widgets/incident_card.dart';
 import '../details/incident_details_screen.dart';
 
-/// Browse, search and filter reports. All filter state lives in
-/// [IncidentProvider] so it survives tab switches and can be preset from the
-/// dashboard.
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({super.key});
 
@@ -34,7 +31,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
     final isStaff = incidents.user?.isStaff ?? false;
     final results = incidents.filteredIncidents;
 
-    // Keep the text box in sync when filters are cleared elsewhere.
     if (_searchController.text != incidents.query) {
       _searchController.text = incidents.query;
     }
@@ -48,9 +44,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
             child: Text(
               isStaff ? 'All Reports' : 'Reports',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w800,
-              ),
+              style: Theme.of(context).textTheme.headlineSmall
+                  ?.copyWith(fontWeight: FontWeight.w800),
             ),
           ),
           const SizedBox(height: 14),
@@ -315,9 +310,8 @@ class _CategoryFilterButton extends StatelessWidget {
             children: [
               Text(
                 'Filter by category',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
+                style: Theme.of(context).textTheme.titleMedium
+                    ?.copyWith(fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 16),
               Wrap(
@@ -345,7 +339,6 @@ class _CategoryFilterButton extends StatelessWidget {
         ),
       ),
     );
-    // Dismissing the sheet (null result) keeps the current filter.
     if (result != null) onSelected(result.category);
   }
 

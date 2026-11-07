@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import '../core/theme/status_style.dart';
 import '../models/incident_enums.dart';
 
-/// Shows an incident photo, falling back to a tinted category icon when the
-/// report has no photo or the image fails to load.
 class IncidentImage extends StatelessWidget {
   const IncidentImage({
     super.key,
@@ -19,7 +17,6 @@ class IncidentImage extends StatelessWidget {
   final String? imageUrl;
   final IncidentCategory category;
 
-  /// Square size; ignored when [height] is set (full-width image).
   final double? size;
   final double? height;
   final double borderRadius;
@@ -32,11 +29,7 @@ class IncidentImage extends StatelessWidget {
       width: width,
       height: h,
       color: category.color.withValues(alpha: 0.12),
-      child: Icon(
-        category.icon,
-        color: category.color,
-        size: (h ?? 48) * 0.4,
-      ),
+      child: Icon(category.icon, color: category.color, size: (h ?? 48) * 0.4),
     );
 
     return ClipRRect(

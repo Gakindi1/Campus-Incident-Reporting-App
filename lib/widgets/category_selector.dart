@@ -4,7 +4,6 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/status_style.dart';
 import '../models/incident_enums.dart';
 
-/// Grid of selectable incident categories.
 class CategorySelector extends StatelessWidget {
   const CategorySelector({
     super.key,

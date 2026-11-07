@@ -9,7 +9,6 @@ import '../../models/incident_enums.dart';
 import '../../providers/incident_provider.dart';
 import '../../widgets/common.dart';
 
-/// Staff-only bottom sheet for moving an incident to its next status.
 Future<void> showUpdateStatusSheet(BuildContext context, Incident incident) {
   return showModalBottomSheet<void>(
     context: context,

@@ -103,33 +103,35 @@ void main() {
       await bind(staff);
       final queue = provider.staffQueue.map((i) => i.id).toList();
       expect(queue.first, 'urgent');
-      expect(queue, isNot(contains('c'))); // resolved is not in the queue
+      expect(queue, isNot(contains('c')));
     });
   });
 
   group('commands', () {
-    test('submitReport uploads the photo and creates a submitted report',
-        () async {
-      await bind(student);
-      await provider.submitReport(
-        title: 'Flickering lights',
-        description: 'Lights in the library keep flickering all day.',
-        category: IncidentCategory.electricity,
-        priority: IncidentPriority.medium,
-        location: 'Library',
-        locationDetail: '2nd floor',
-        isAnonymous: true,
-        photo: File('photo.jpg'),
-      );
-      await pumpEventQueue();
+    test(
+      'submitReport uploads the photo and creates a submitted report',
+      () async {
+        await bind(student);
+        await provider.submitReport(
+          title: 'Flickering lights',
+          description: 'Lights in the library keep flickering all day.',
+          category: IncidentCategory.electricity,
+          priority: IncidentPriority.medium,
+          location: 'Library',
+          locationDetail: '2nd floor',
+          isAnonymous: true,
+          photo: File('photo.jpg'),
+        );
+        await pumpEventQueue();
 
-      final created = repository.byId('new-0')!;
-      expect(created.status, IncidentStatus.submitted);
-      expect(created.reporterId, student.uid);
-      expect(created.reporterName, 'Anonymous student');
-      expect(created.imagePath, storage.uploaded.single);
-      expect(provider.myIncidents.map((i) => i.id), contains('new-0'));
-    });
+        final created = repository.byId('new-0')!;
+        expect(created.status, IncidentStatus.submitted);
+        expect(created.reporterId, student.uid);
+        expect(created.reporterName, 'Anonymous student');
+        expect(created.imagePath, storage.uploaded.single);
+        expect(provider.myIncidents.map((i) => i.id), contains('new-0'));
+      },
+    );
 
     test('a failed save removes the orphaned photo', () async {
       await bind(student);

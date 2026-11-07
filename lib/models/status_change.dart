@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'incident_enums.dart';
 
-/// One entry in an incident's status timeline.
 class StatusChange {
   const StatusChange({
     required this.status,
@@ -28,8 +27,6 @@ class StatusChange {
     );
   }
 
-  /// Array elements cannot use server timestamps, so a client timestamp is
-  /// stored here; the parent document still uses server time for ordering.
   Map<String, dynamic> toMap() => {
     'status': status.name,
     'changedAt': Timestamp.fromDate(changedAt),

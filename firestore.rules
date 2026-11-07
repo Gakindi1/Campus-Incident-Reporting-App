@@ -1,16 +1,11 @@
 rules_version = '2';
 
-// CampusFix Firestore security rules.
-// The app hides staff-only actions in the UI, but these rules are the real
-// access control: a modified client still cannot change statuses or roles.
 service cloud.firestore {
   match /databases/{database}/documents {
-
     function signedIn() {
       return request.auth != null;
     }
 
-    // Verified ALU account (student or staff domain).
     function verifiedAlu() {
       return signedIn()
         && request.auth.token.email_verified == true
@@ -29,19 +24,15 @@ service cloud.firestore {
       return request.resource.data.diff(resource.data).affectedKeys();
     }
 
-    // ---------------------------------------------------------------- users
     match /users/{uid} {
       allow read: if signedIn() && (request.auth.uid == uid || isStaff());
 
-      // Profiles are created at registration (before verification) and are
-      // ALWAYS students. Staff are promoted in the Firebase Console.
       allow create: if signedIn()
         && request.auth.uid == uid
         && request.resource.data.role == 'student'
         && request.resource.data.keys().hasOnly(
              ['fullName', 'email', 'role', 'createdAt']);
 
-      // Users may edit their own name but never their role.
       allow update: if signedIn()
         && request.auth.uid == uid
         && changed().hasOnly(['fullName']);
@@ -49,7 +40,6 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    // ------------------------------------------------------------ incidents
     match /incidents/{incidentId} {
       allow read: if verifiedAlu();
 
@@ -70,14 +60,12 @@ service cloud.firestore {
         && request.resource.data.statusHistory.size() == 1;
 
       allow update: if
-        // Staff move the status forward and append to the timeline only.
         (isStaff()
           && changed().hasOnly(['status', 'statusHistory', 'updatedAt'])
           && request.resource.data.status in
                ['submitted', 'underReview', 'inProgress', 'resolved', 'rejected']
           && request.resource.data.statusHistory.size()
                == resource.data.statusHistory.size() + 1)
-        // Reporters edit details only while nobody has acted on the report.
         || (verifiedAlu()
           && resource.data.reporterId == request.auth.uid
           && resource.data.status == 'submitted'
@@ -87,12 +75,10 @@ service cloud.firestore {
           && request.resource.data.title.size() >= 5
           && request.resource.data.title.size() <= 80
           && request.resource.data.description.size() <= 1000)
-        // Any verified user may add or remove ONLY their own "Me too".
         || (verifiedAlu()
           && changed().hasOnly(['supporters'])
           && onlyOwnSupportToggled());
 
-      // Reporters may withdraw before review; staff may remove abuse/spam.
       allow delete: if isStaff()
         || (verifiedAlu()
           && resource.data.reporterId == request.auth.uid

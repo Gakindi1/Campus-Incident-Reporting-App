@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'incident_enums.dart';
 import 'status_change.dart';
 
-/// An incident report stored in the `incidents` Firestore collection.
 class Incident {
   const Incident({
     required this.id,
@@ -35,7 +34,6 @@ class Incident {
   final String locationDetail;
   final String? imageUrl;
 
-  /// Storage path of the photo, kept so the file can be removed on delete.
   final String? imagePath;
   final String reporterId;
   final String reporterName;
@@ -44,8 +42,6 @@ class Incident {
   final DateTime updatedAt;
   final List<StatusChange> statusHistory;
 
-  /// UIDs of students who confirmed they are affected by the same issue
-  /// ("Me too"). Encourages confirming an existing report over duplicating it.
   final List<String> supporters;
 
   String get fullLocation =>
@@ -55,10 +51,8 @@ class Incident {
 
   bool isSupportedBy(String uid) => supporters.contains(uid);
 
-  /// Students may only edit or withdraw a report before staff act on it.
   bool get isEditableByReporter => status == IncidentStatus.submitted;
 
-  /// The name shown to people other than the reporter and staff.
   String get publicReporterName =>
       isAnonymous ? 'Anonymous student' : reporterName;
 
@@ -93,8 +87,6 @@ class Incident {
     );
   }
 
-  /// Fields written when a report is first created. Timestamps are filled in
-  /// by the repository using server time.
   Map<String, dynamic> toCreateMap() => {
     'title': title,
     'description': description,
@@ -149,8 +141,6 @@ class Incident {
   }
 }
 
-/// Server timestamps are null in the local cache until the write is
-/// acknowledged, so fall back to "now" to keep pending reports sortable.
 DateTime _toDate(Object? value) {
   if (value is Timestamp) return value.toDate();
   if (value is DateTime) return value;

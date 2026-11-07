@@ -43,7 +43,9 @@ void main() {
     test('description needs enough detail', () {
       expect(Validators.incidentDescription('Too short'), isNotNull);
       expect(
-        Validators.incidentDescription('The projector in B204 will not turn on.'),
+        Validators.incidentDescription(
+          'The projector in B204 will not turn on.',
+        ),
         isNull,
       );
     });

@@ -9,10 +9,6 @@ import '../../providers/auth_provider.dart';
 import '../../widgets/common.dart';
 import 'widgets/auth_scaffold.dart';
 
-/// Blocks access until the user confirms their ALU email address.
-///
-/// Polls Firebase every few seconds so the app continues automatically once
-/// the link is clicked, with a manual button as a fallback.
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({super.key});
 

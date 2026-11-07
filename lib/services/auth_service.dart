@@ -4,10 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../core/utils/validators.dart';
 import '../models/app_user.dart';
 
-/// Thin wrapper around Firebase Authentication and the `users` collection.
-///
-/// Converts Firebase error codes into messages that make sense to students,
-/// so the UI layer never has to know about [FirebaseAuthException].
 class AuthService {
   AuthService({FirebaseAuth? auth, FirebaseFirestore? firestore})
     : _auth = auth ?? FirebaseAuth.instance,
@@ -33,7 +29,6 @@ class AuthService {
     required String email,
     required String password,
   }) async {
-    // Defence in depth: the form validates this too, but never trust the UI.
     if (!Validators.isAluEmail(email)) {
       throw const AuthFailure('Only ALU email addresses can register.');
     }
@@ -56,11 +51,7 @@ class AuthService {
     }
   }
 
-  /// Recreates a missing profile (e.g. if the network dropped right after
-  /// registration). Always as a student; rules reject anything else.
   Future<void> ensureProfile(User user) async {
-    // Confirm with the server: an offline cache miss must never overwrite a
-    // real profile.
     final doc = _users.doc(user.uid);
     final snapshot = await doc.get(const GetOptions(source: Source.server));
     if (snapshot.exists) return;
@@ -99,8 +90,6 @@ class AuthService {
     }
   }
 
-  /// Reloads the user so a freshly clicked verification link is detected,
-  /// and refreshes the ID token so security rules see `email_verified`.
   Future<bool> reloadAndCheckVerified() async {
     final user = _auth.currentUser;
     if (user == null) return false;

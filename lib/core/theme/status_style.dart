@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import '../../models/incident_enums.dart';
 import 'app_colors.dart';
 
-/// Presentation colours for domain enums, kept out of the models so the data
-/// layer has no dependency on the visual design.
 extension IncidentStatusStyle on IncidentStatus {
   Color get color => switch (this) {
     IncidentStatus.submitted => AppColors.submitted,

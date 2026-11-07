@@ -15,8 +15,6 @@ import '../../widgets/common.dart';
 import '../../widgets/incident_image.dart';
 import '../details/incident_details_screen.dart';
 
-/// Create a new report, or edit one that is still "Submitted" when
-/// [existing] is provided.
 class ReportIncidentScreen extends StatelessWidget {
   const ReportIncidentScreen({super.key, this.existing});
 
@@ -122,11 +120,7 @@ class _ReportFormState extends State<_ReportForm> {
         icon: const CircleAvatar(
           radius: 32,
           backgroundColor: AppColors.resolvedBg,
-          child: Icon(
-            Icons.check_rounded,
-            color: AppColors.resolved,
-            size: 36,
-          ),
+          child: Icon(Icons.check_rounded, color: AppColors.resolved, size: 36),
         ),
         title: const Text('Report submitted'),
         content: const Text(
@@ -232,8 +226,7 @@ class _ReportFormState extends State<_ReportForm> {
                   maxLength: 1000,
                   validator: Validators.incidentDescription,
                   decoration: const InputDecoration(
-                    hintText:
-                        'What happened, since when, and who is affected?',
+                    hintText: 'What happened, since when, and who is affected?',
                   ),
                 ),
               ),
@@ -327,8 +320,6 @@ class _ReportFormState extends State<_ReportForm> {
   }
 }
 
-/// Warns when similar open reports exist, nudging students to add a
-/// "Me too" instead of filing a duplicate.
 class _DuplicateWarning extends StatelessWidget {
   const _DuplicateWarning();
 
@@ -356,8 +347,11 @@ class _DuplicateWarning extends StatelessWidget {
         children: [
           const Row(
             children: [
-              Icon(Icons.info_outline_rounded,
-                  color: AppColors.submitted, size: 20),
+              Icon(
+                Icons.info_outline_rounded,
+                color: AppColors.submitted,
+                size: 20,
+              ),
               SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -387,8 +381,11 @@ class _DuplicateWarning extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 6),
                 child: Row(
                   children: [
-                    Icon(incident.status.icon,
-                        size: 16, color: incident.status.color),
+                    Icon(
+                      incident.status.icon,
+                      size: 16,
+                      color: incident.status.color,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -439,8 +436,11 @@ class _PhotoPicker extends StatelessWidget {
           child: const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.add_a_photo_outlined,
-                  color: AppColors.primary, size: 30),
+              Icon(
+                Icons.add_a_photo_outlined,
+                color: AppColors.primary,
+                size: 30,
+              ),
               SizedBox(height: 8),
               Text(
                 'Tap to take or choose a photo',

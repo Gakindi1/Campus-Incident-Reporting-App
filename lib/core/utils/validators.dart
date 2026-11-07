@@ -1,11 +1,6 @@
-/// Form validators shared by the auth and reporting screens.
-///
-/// Each returns `null` when the value is valid, which is the contract
-/// expected by [FormField.validator].
 class Validators {
   Validators._();
 
-  /// Only ALU community accounts may use the app.
   static const List<String> allowedEmailDomains = [
     'alustudent.com',
     'alueducation.com',
@@ -78,7 +73,5 @@ class Validators {
   }
 
   static String? requiredField(String? value, String fieldName) =>
-      (value == null || value.trim().isEmpty)
-      ? '$fieldName is required'
-      : null;
+      (value == null || value.trim().isEmpty) ? '$fieldName is required' : null;
 }

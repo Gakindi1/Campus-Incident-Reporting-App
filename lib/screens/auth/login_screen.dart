@@ -33,7 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
     FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
     try {
-      // On success the AuthGate swaps this screen out automatically.
       await context.read<AuthProvider>().signIn(
         _emailController.text,
         _passwordController.text,
@@ -66,7 +65,8 @@ class _LoginScreenState extends State<LoginScreen> {
     final isBusy = context.select<AuthProvider, bool>((a) => a.isBusy);
     return AuthScaffold(
       title: 'Welcome back',
-      subtitle: 'Sign in with your ALU account to report and track campus issues.',
+      subtitle:
+          'Sign in with your ALU account to report and track campus issues.',
       child: Form(
         key: _formKey,
         child: Column(
